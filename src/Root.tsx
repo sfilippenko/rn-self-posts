@@ -7,7 +7,7 @@ import Post from './screens/Post';
 import Bookmarked from './screens/Bookmarked';
 import { Routes, TabRoutes } from './types/navigation';
 import { Colors } from './consts/theme';
-import TabIcon from './components/TabIcon';
+import TabBar from './components/TabBar';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,20 +48,21 @@ const MainStackScreen: React.FC = () => {
 
 const Root: React.FC = () => {
   return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: Colors.Main,
-      }}
-      screenOptions={({ route }) => {
-        return {
-          tabBarIcon: (props) => {
-            return <TabIcon {...props} route={route} />;
-          },
-          tabBarLabel: '',
-        };
-      }}>
-      <Tab.Screen name={TabRoutes.MainTab} component={MainStackScreen} />
-      <Tab.Screen name={TabRoutes.BookmarkedTab} component={BookmarkedStackScreen} />
+    <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
+      <Tab.Screen
+        options={{
+          tabBarLabel: 'Все',
+        }}
+        name={TabRoutes.MainTab}
+        component={MainStackScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabel: 'Избранное',
+        }}
+        name={TabRoutes.BookmarkedTab}
+        component={BookmarkedStackScreen}
+      />
     </Tab.Navigator>
   );
 };
