@@ -6,10 +6,10 @@ import Post from './screens/Post';
 import Create from './screens/Create';
 import Bookmarked from './screens/Bookmarked';
 import About from './screens/About';
-import { Routes } from './types/navigation';
+import { ParamsList, Routes } from './types/navigation';
 import { Colors } from './consts/theme';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<ParamsList>();
 
 const Root: React.FC = () => {
   return (
