@@ -15,3 +15,8 @@ export type ParamsList = {
   [Routes.Bookmarked]: undefined;
   [Routes.Create]: undefined;
 };
+
+export enum TabRoutes {
+  MainTab = 'mainTab',
+  BookmarkedTab = 'bookmarkedTab',
+}

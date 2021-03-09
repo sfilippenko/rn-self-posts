@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Post as PostInterface } from '../../../types/common';
-import AppText from '../../../components/AppText';
-import { Colors } from '../../../consts/theme';
-import { Routes } from '../../../types/navigation';
+import { Post as PostInterface } from '../../types/common';
+import AppText from '../AppText';
+import { Colors } from '../../consts/theme';
+import { Routes } from '../../types/navigation';
 
 interface Props {
   data: PostInterface;

@@ -1,19 +1,22 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Main from './screens/Main';
 import Post from './screens/Post';
-import Create from './screens/Create';
 import Bookmarked from './screens/Bookmarked';
-import About from './screens/About';
-import { ParamsList, Routes } from './types/navigation';
+import { Routes, TabRoutes } from './types/navigation';
 import { Colors } from './consts/theme';
+import TabIcon from './components/TabIcon';
 
-const Stack = createStackNavigator<ParamsList>();
+const Tab = createBottomTabNavigator();
 
-const Root: React.FC = () => {
+const BookmarkedStack = createStackNavigator();
+const MainStack = createStackNavigator();
+
+const BookmarkedStackScreen: React.FC = () => {
   return (
-    <Stack.Navigator
+    <BookmarkedStack.Navigator
       screenOptions={{
         headerBackTitleVisible: false,
         headerStyle: styles.header,
@@ -21,24 +24,45 @@ const Root: React.FC = () => {
         headerTintColor: Colors.White,
         cardStyle: styles.card,
       }}>
-      <Stack.Screen
-        name={Routes.Main}
-        component={Main}
-        options={{
-          title: 'Главная',
-        }}
-      />
-      <Stack.Screen
-        name={Routes.Post}
-        component={Post}
-        options={{
-          title: 'Пост',
-        }}
-      />
-      <Stack.Screen name={Routes.About} component={About} />
-      <Stack.Screen name={Routes.Bookmarked} component={Bookmarked} />
-      <Stack.Screen name={Routes.Create} component={Create} />
-    </Stack.Navigator>
+      <BookmarkedStack.Screen name={Routes.Bookmarked} component={Bookmarked} />
+      <BookmarkedStack.Screen name={Routes.Post} component={Post} />
+    </BookmarkedStack.Navigator>
+  );
+};
+
+const MainStackScreen: React.FC = () => {
+  return (
+    <MainStack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerStyle: styles.header,
+        headerTitleAlign: 'center',
+        headerTintColor: Colors.White,
+        cardStyle: styles.card,
+      }}>
+      <BookmarkedStack.Screen name={Routes.Main} component={Main} />
+      <BookmarkedStack.Screen name={Routes.Post} component={Post} />
+    </MainStack.Navigator>
+  );
+};
+
+const Root: React.FC = () => {
+  return (
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: Colors.Main,
+      }}
+      screenOptions={({ route }) => {
+        return {
+          tabBarIcon: (props) => {
+            return <TabIcon {...props} route={route} />;
+          },
+          tabBarLabel: '',
+        };
+      }}>
+      <Tab.Screen name={TabRoutes.MainTab} component={MainStackScreen} />
+      <Tab.Screen name={TabRoutes.BookmarkedTab} component={BookmarkedStackScreen} />
+    </Tab.Navigator>
   );
 };
 

@@ -5,7 +5,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { ParamsList, Routes } from '../../types/navigation';
 import { DATA } from '../../consts/data';
 import { Post as PostInterface } from '../../types/common';
-import Post from './Post';
+import Post from '../../components/Post';
 import AppHeaderIcon from '../../components/AppHeaderIcon';
 
 const Main: React.FC<StackScreenProps<ParamsList, Routes.Main>> = (props) => {
@@ -23,6 +23,7 @@ const Main: React.FC<StackScreenProps<ParamsList, Routes.Main>> = (props) => {
           <Item title="Toggle" iconName="ios-menu" />
         </HeaderButtons>
       ),
+      title: 'Мой блог',
     });
   }, [navigation]);
 
