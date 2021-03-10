@@ -2,18 +2,20 @@ import { Post } from './common';
 
 export enum Routes {
   Main = 'main',
-  Post = 'post',
   About = 'about',
-  Bookmarked = 'bookmarked',
   Create = 'create',
 }
 
-export type ParamsList = {
-  [Routes.Main]: undefined;
-  [Routes.Post]: Post;
-  [Routes.About]: undefined;
-  [Routes.Bookmarked]: undefined;
-  [Routes.Create]: undefined;
+export enum MainRoutes {
+  Main = 'mainRoute',
+  Post = 'postRoute',
+  Bookmarked = 'bookmarkedRoute',
+}
+
+export type MainParamsList = {
+  [MainRoutes.Main]: undefined;
+  [MainRoutes.Post]: Post;
+  [MainRoutes.Bookmarked]: undefined;
 };
 
 export enum TabRoutes {

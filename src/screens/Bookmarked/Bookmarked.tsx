@@ -1,23 +1,18 @@
 import React from 'react';
 import { StyleSheet, View, FlatList, ListRenderItem } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { ParamsList, Routes } from '../../types/navigation';
+import { MainParamsList, MainRoutes } from '../../types/navigation';
 import { DATA } from '../../consts/data';
 import { Post as PostInterface } from '../../types/common';
 import Post from '../../components/Post';
-import AppHeaderIcon from '../../components/AppHeaderIcon';
+import DrawerOpener from '../../components/DrawerOpener';
 
-const Bookmarked: React.FC<StackScreenProps<ParamsList, Routes.Bookmarked>> = (props) => {
+const Bookmarked: React.FC<StackScreenProps<MainParamsList, MainRoutes.Bookmarked>> = (props) => {
   const { navigation } = props;
 
   React.useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-          <Item title="Toggle" iconName="ios-menu" />
-        </HeaderButtons>
-      ),
+      headerLeft: () => <DrawerOpener />,
       title: 'Избранное',
     });
   }, [navigation]);

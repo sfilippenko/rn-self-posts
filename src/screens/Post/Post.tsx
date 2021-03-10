@@ -3,13 +3,13 @@ import { StyleSheet, View, Image, ScrollView, Alert } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { ParamsList, Routes } from '../../types/navigation';
+import { MainParamsList, MainRoutes } from '../../types/navigation';
 import { DATA } from '../../consts/data';
 import AppText from '../../components/AppText';
 import AppButton from '../../components/AppButton';
 import AppHeaderIcon from '../../components/AppHeaderIcon';
 
-const Post: React.FC<StackScreenProps<ParamsList, Routes.Post>> = (props) => {
+const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props) => {
   const { route, navigation } = props;
   const { id, date } = route.params;
   const insets = useSafeAreaInsets();

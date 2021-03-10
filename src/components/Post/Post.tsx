@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Post as PostInterface } from '../../types/common';
 import AppText from '../AppText';
 import { Colors } from '../../consts/theme';
-import { Routes } from '../../types/navigation';
+import { MainRoutes } from '../../types/navigation';
 
 interface Props {
   data: PostInterface;
@@ -16,7 +16,7 @@ const Post: React.FC<Props> = (props) => {
   const { img, date } = data;
 
   const handlePress = React.useCallback(() => {
-    navigation.navigate<Routes.Post>(Routes.Post, data);
+    navigation.navigate(MainRoutes.Post, data);
   }, [navigation, data]);
 
   return (

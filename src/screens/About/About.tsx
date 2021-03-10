@@ -1,10 +1,23 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import DrawerOpener from '../../components/DrawerOpener';
+import AppText from '../../components/AppText';
 
-const About: React.FC = () => {
+const About: React.FC<DrawerScreenProps<any>> = (props) => {
+  const { navigation } = props;
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <DrawerOpener />,
+      title: 'О приложении',
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
-      <Text>About screen</Text>
+      <AppText>Личные заметки</AppText>
+      <AppText>Версия приложения 1.0.0</AppText>
     </View>
   );
 };

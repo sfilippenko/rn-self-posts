@@ -1,28 +1,29 @@
 import React from 'react';
 import { StyleSheet, View, FlatList, ListRenderItem } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { ParamsList, Routes } from '../../types/navigation';
+import { Routes } from '../../types/navigation';
 import { DATA } from '../../consts/data';
 import { Post as PostInterface } from '../../types/common';
 import Post from '../../components/Post';
 import AppHeaderIcon from '../../components/AppHeaderIcon';
+import DrawerOpener from '../../components/DrawerOpener';
 
-const Main: React.FC<StackScreenProps<ParamsList, Routes.Main>> = (props) => {
+const Main: React.FC<DrawerScreenProps<any>> = (props) => {
   const { navigation } = props;
 
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-          <Item title="Take photo" iconName="ios-camera" />
+          <Item
+            title="Take photo"
+            iconName="ios-camera"
+            onPress={() => navigation.navigate(Routes.Create)}
+          />
         </HeaderButtons>
       ),
-      headerLeft: () => (
-        <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-          <Item title="Toggle" iconName="ios-menu" />
-        </HeaderButtons>
-      ),
+      headerLeft: () => <DrawerOpener />,
       title: 'Мой блог',
     });
   }, [navigation]);
