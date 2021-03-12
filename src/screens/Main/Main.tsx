@@ -1,16 +1,15 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, ListRenderItem } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Routes } from '../../types/navigation';
-import { Post as PostInterface } from '../../types/common';
-import Post from '../../components/Post';
 import AppHeaderIcon from '../../components/AppHeaderIcon';
 import DrawerOpener from '../../components/DrawerOpener';
 import { getPostsAsync } from '../../store/post/async';
 import { selectPosts, selectPostsLoaded, selectPostsLoading } from '../../store/post/selectors';
 import Loader from '../../components/Loader';
+import PostList from '../../components/PostList';
 
 const Main: React.FC<DrawerScreenProps<any>> = (props) => {
   const { navigation } = props;
@@ -41,21 +40,7 @@ const Main: React.FC<DrawerScreenProps<any>> = (props) => {
     });
   }, [navigation]);
 
-  const keyExtractor = React.useCallback((post) => post.id, []);
-
-  const renderItem: ListRenderItem<PostInterface> = React.useCallback(({ item }) => {
-    return <Post data={item} />;
-  }, []);
-
-  return (
-    <View style={styles.container}>
-      {loading ? (
-        <Loader />
-      ) : (
-        <FlatList<PostInterface> data={posts} keyExtractor={keyExtractor} renderItem={renderItem} />
-      )}
-    </View>
-  );
+  return <View style={styles.container}>{loading ? <Loader /> : <PostList data={posts} />}</View>;
 };
 
 const styles = StyleSheet.create({

@@ -77,13 +77,16 @@ const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 10,
   },
   textWrapper: {
-    padding: 10,
+    marginBottom: 10,
   },
   image: {
     width: '100%',
-    height: 200,
+    height: 300,
+    resizeMode: 'contain',
+    marginBottom: 10,
   },
 });
 

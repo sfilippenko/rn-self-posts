@@ -1,10 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, ListRenderItem } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { MainParamsList, MainRoutes } from '../../types/navigation';
-import { Post as PostInterface } from '../../types/common';
-import Post from '../../components/Post';
 import DrawerOpener from '../../components/DrawerOpener';
 import {
   selectBookedPosts,
@@ -13,6 +11,7 @@ import {
 } from '../../store/post/selectors';
 import { getPostsAsync } from '../../store/post/async';
 import Loader from '../../components/Loader';
+import PostList from '../../components/PostList';
 
 const Bookmarked: React.FC<StackScreenProps<MainParamsList, MainRoutes.Bookmarked>> = (props) => {
   const { navigation } = props;
@@ -34,21 +33,7 @@ const Bookmarked: React.FC<StackScreenProps<MainParamsList, MainRoutes.Bookmarke
     });
   }, [navigation]);
 
-  const keyExtractor = React.useCallback((post) => post.id, []);
-
-  const renderItem: ListRenderItem<PostInterface> = React.useCallback(({ item }) => {
-    return <Post data={item} />;
-  }, []);
-
-  return (
-    <View style={styles.container}>
-      {loading ? (
-        <Loader />
-      ) : (
-        <FlatList<PostInterface> data={posts} keyExtractor={keyExtractor} renderItem={renderItem} />
-      )}
-    </View>
-  );
+  return <View style={styles.container}>{loading ? <Loader /> : <PostList data={posts} />}</View>;
 };
 
 const styles = StyleSheet.create({

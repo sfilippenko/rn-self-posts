@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Image, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -10,6 +10,7 @@ import AppText from '../../components/AppText';
 import AppButton from '../../components/AppButton';
 import { addPost } from '../../store/post/actions';
 import { MainRoutes } from '../../types/navigation';
+import PhotoPicker from '../../components/PhotoPicker';
 
 const Create: React.FC<DrawerScreenProps<any>> = (props) => {
   const { navigation } = props;
@@ -18,11 +19,13 @@ const Create: React.FC<DrawerScreenProps<any>> = (props) => {
   const headerHeight = useHeaderHeight();
   const isFocused = useIsFocused();
 
-  const [text, setText] = React.useState('njsnfjsdf'.repeat(1));
+  const [text, setText] = React.useState('');
+  const [uri, setUri] = React.useState('');
 
   React.useEffect(() => {
     return () => {
       setText('');
+      setUri('');
     };
   }, [isFocused]);
 
@@ -34,15 +37,21 @@ const Create: React.FC<DrawerScreenProps<any>> = (props) => {
   }, [navigation]);
 
   const handleCreate = React.useCallback(() => {
-    dispatch(
-      addPost({
-        img: '',
-        date: new Date().toJSON(),
-        text,
-      }),
-    );
-    navigation.navigate(MainRoutes.Main);
-  }, [navigation, dispatch, text]);
+    if (!text.trim()) {
+      Alert.alert('Заполните текст');
+    } else if (!uri) {
+      Alert.alert('Сделайте фото');
+    } else {
+      dispatch(
+        addPost({
+          img: uri,
+          date: new Date().toJSON(),
+          text: text.trim(),
+        }),
+      );
+      navigation.navigate(MainRoutes.Main);
+    }
+  }, [navigation, dispatch, text, uri]);
 
   return (
     <KeyboardAvoidingView
@@ -58,10 +67,7 @@ const Create: React.FC<DrawerScreenProps<any>> = (props) => {
           placeholder="Введите текст"
           style={styles.textarea}
         />
-        <Image
-          style={{ width: '100%', height: 200 }}
-          source={{ uri: 'https://dummyimage.com/600x400/999/fff.png' }}
-        />
+        <PhotoPicker uri={uri} onChange={setUri} />
         <AppButton onPress={handleCreate}>Создать</AppButton>
       </ScrollView>
     </KeyboardAvoidingView>
