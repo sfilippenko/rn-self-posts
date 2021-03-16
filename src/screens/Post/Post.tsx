@@ -8,30 +8,32 @@ import { MainParamsList, MainRoutes } from '../../types/navigation';
 import AppText from '../../components/AppText';
 import AppButton from '../../components/AppButton';
 import AppHeaderIcon from '../../components/AppHeaderIcon';
-import { selectPosts } from '../../store/post/selectors';
-import { toggleBooked } from '../../store/post/actions';
+import { selectIsPostUpdating, selectPost } from '../../store/post/selectors';
+import { formatDate } from '../../utils/dates';
+import { deletePostAsync, toggleBookedAsync } from '../../store/post/async';
+import { AppState } from '../../types/state';
 
 const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props) => {
   const { route, navigation } = props;
-  const { id, date } = route.params;
+  const { id } = route.params;
+  const loading = useSelector((state: AppState) => selectIsPostUpdating(state, id));
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
-  const posts = useSelector(selectPosts);
-
-  const post = posts.find((item) => item.id === id);
+  const post = useSelector((state: AppState) => selectPost(state, id));
 
   const handlePress = React.useCallback(() => {
     if (post) {
-      dispatch(toggleBooked(post.id));
+      dispatch(toggleBookedAsync(post));
     }
   }, [dispatch, post]);
 
   React.useEffect(() => {
     navigation.setOptions({
-      title: `Пост от ${new Date(date).toLocaleString()}`,
+      title: `Пост от ${formatDate(post?.date, { showHours: true })}`,
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
           <Item
+            disabled={loading}
             onPress={handlePress}
             title="Take photo"
             iconName={post?.booked ? 'ios-star' : 'ios-star-outline'}
@@ -39,7 +41,7 @@ const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props
         </HeaderButtons>
       ),
     });
-  }, [handlePress, navigation, date, post]);
+  }, [handlePress, navigation, post, loading]);
 
   const handleDelete = React.useCallback(() => {
     if (!post) {
@@ -53,11 +55,11 @@ const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props
           text: 'Отменить',
           style: 'cancel',
         },
-        { text: 'Удалить', onPress: () => console.log('OK Pressed') },
+        { text: 'Удалить', onPress: () => dispatch(deletePostAsync(post.id, navigation)) },
       ],
       { cancelable: false },
     );
-  }, [post]);
+  }, [post, dispatch, navigation]);
 
   if (!post) {
     return null;
@@ -69,7 +71,9 @@ const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props
       <View style={styles.textWrapper}>
         <AppText>{post.text}</AppText>
       </View>
-      <AppButton onPress={handleDelete}>Удалить</AppButton>
+      <AppButton disabled={loading} onPress={handleDelete}>
+        Удалить
+      </AppButton>
     </ScrollView>
   );
 };

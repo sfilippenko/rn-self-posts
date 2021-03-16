@@ -7,10 +7,11 @@ import AppButton from '../AppButton';
 interface Props {
   uri: string;
   onChange: (uri: string) => void;
+  disabled?: boolean;
 }
 
 const PhotoPicker: React.FC<Props> = (props) => {
-  const { uri, onChange } = props;
+  const { uri, onChange, disabled } = props;
 
   const handlePress = React.useCallback(async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.MEDIA_LIBRARY);
@@ -29,7 +30,9 @@ const PhotoPicker: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.wrapper}>
-      <AppButton onPress={handlePress}>Сделать фото</AppButton>
+      <AppButton disabled={disabled} onPress={handlePress}>
+        Сделать фото
+      </AppButton>
       {!!uri && <Image resizeMode="contain" style={styles.image} source={{ uri }} />}
     </View>
   );

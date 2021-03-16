@@ -40,6 +40,7 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', 'prettier', '@typescript-eslint'],
+  ignorePatterns: ['db.js'],
   rules: {
     'prettier/prettier': [
       'error',
@@ -64,6 +65,7 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    'no-underscore-dangle': 0,
     'import/named': 0,
     'react/jsx-props-no-spreading': 0,
     'no-shadow': 0,

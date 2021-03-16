@@ -1,19 +1,20 @@
 import React from 'react';
-import { StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { StyleSheet, TextInput, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useIsFocused } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DrawerOpener from '../../components/DrawerOpener';
 import AppText from '../../components/AppText';
 import AppButton from '../../components/AppButton';
-import { addPost } from '../../store/post/actions';
-import { MainRoutes } from '../../types/navigation';
 import PhotoPicker from '../../components/PhotoPicker';
+import { selectPostsCreateLoading } from '../../store/post/selectors';
+import { addPostAsync } from '../../store/post/async';
 
 const Create: React.FC<DrawerScreenProps<any>> = (props) => {
   const { navigation } = props;
+  const loading = useSelector(selectPostsCreateLoading);
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
@@ -37,20 +38,15 @@ const Create: React.FC<DrawerScreenProps<any>> = (props) => {
   }, [navigation]);
 
   const handleCreate = React.useCallback(() => {
-    if (!text.trim()) {
-      Alert.alert('Заполните текст');
-    } else if (!uri) {
-      Alert.alert('Сделайте фото');
-    } else {
-      dispatch(
-        addPost({
+    dispatch(
+      addPostAsync(
+        {
           img: uri,
-          date: new Date().toJSON(),
           text: text.trim(),
-        }),
-      );
-      navigation.navigate(MainRoutes.Main);
-    }
+        },
+        navigation,
+      ),
+    );
   }, [navigation, dispatch, text, uri]);
 
   return (
@@ -66,9 +62,12 @@ const Create: React.FC<DrawerScreenProps<any>> = (props) => {
           onChangeText={setText}
           placeholder="Введите текст"
           style={styles.textarea}
+          editable={!loading}
         />
-        <PhotoPicker uri={uri} onChange={setUri} />
-        <AppButton onPress={handleCreate}>Создать</AppButton>
+        <PhotoPicker disabled={loading} uri={uri} onChange={setUri} />
+        <AppButton disabled={loading} onPress={handleCreate}>
+          Создать
+        </AppButton>
       </ScrollView>
     </KeyboardAvoidingView>
   );

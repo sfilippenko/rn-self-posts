@@ -11,7 +11,7 @@ interface Props {
 const PostList: React.FC<Props> = (props) => {
   const { data } = props;
 
-  const keyExtractor = React.useCallback((post) => post.id, []);
+  const keyExtractor = React.useCallback((post) => String(post.id), []);
 
   const renderItem: ListRenderItem<PostInterface> = React.useCallback(({ item }) => {
     return <Post data={item} />;

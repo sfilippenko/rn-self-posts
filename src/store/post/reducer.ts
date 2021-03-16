@@ -7,6 +7,8 @@ export interface PostState {
   loaded: boolean;
   posts: Post[];
   bookedPosts: Post[];
+  createLoading: boolean;
+  updatingIds: Record<number, boolean>;
 }
 
 const defaultState: PostState = {
@@ -14,6 +16,8 @@ const defaultState: PostState = {
   loaded: false,
   posts: [],
   bookedPosts: [],
+  createLoading: false,
+  updatingIds: {},
 };
 
 const getBookedPosts = (posts: Post[]) => {
@@ -37,31 +41,73 @@ export default handleActions<PostState, any>(
         bookedPosts: getBookedPosts(payload),
       };
     },
-    [actions.toggleBooked.toString()]: (
+    [actions.updatePost.toString()]: (
       state,
-      { payload }: ReturnType<typeof actions.toggleBooked>,
+      { payload }: ReturnType<typeof actions.updatePost>,
     ) => {
-      const allPosts = state.posts.map((post) => {
-        if (post.id === payload) {
-          return {
-            ...post,
-            booked: !post.booked,
-          };
+      const newPosts = state.posts.map((post) => {
+        if (post.id === payload.id) {
+          return payload;
         }
         return post;
       });
       return {
         ...state,
-        posts: allPosts,
-        bookedPosts: getBookedPosts(allPosts),
+        posts: newPosts,
+        bookedPosts: getBookedPosts(newPosts),
       };
     },
     [actions.addPost.toString()]: (state, { payload }: ReturnType<typeof actions.addPost>) => {
-      const newPosts = [{ ...payload, id: String(Math.random()) } as Post, ...state.posts];
+      const newPosts = [payload, ...state.posts];
       return {
         ...state,
         posts: newPosts,
         bookedPosts: getBookedPosts(newPosts),
+        createLoading: false,
+      };
+    },
+    [actions.deletePost.toString()]: (
+      state,
+      { payload }: ReturnType<typeof actions.deletePost>,
+    ) => {
+      const newPosts = state.posts.filter((post) => post.id !== payload);
+      return {
+        ...state,
+        posts: newPosts,
+        bookedPosts: getBookedPosts(newPosts),
+      };
+    },
+    [actions.setCreateLoading.toString()]: (
+      state,
+      { payload }: ReturnType<typeof actions.setCreateLoading>,
+    ) => {
+      return {
+        ...state,
+        createLoading: payload,
+      };
+    },
+    [actions.addUpdateLoading.toString()]: (
+      state,
+      { payload }: ReturnType<typeof actions.addUpdateLoading>,
+    ) => {
+      return {
+        ...state,
+        updatingIds: {
+          ...state.updatingIds,
+          [payload]: true,
+        },
+      };
+    },
+    [actions.removeUpdateLoading.toString()]: (
+      state,
+      { payload }: ReturnType<typeof actions.removeUpdateLoading>,
+    ) => {
+      return {
+        ...state,
+        updatingIds: {
+          ...state.updatingIds,
+          [payload]: false,
+        },
       };
     },
   },

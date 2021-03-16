@@ -1,6 +1,7 @@
 export interface Post {
-  id: string;
+  id: number;
   date: string;
   booked: boolean;
-  [prop: string]: any;
+  text: string;
+  img: string;
 }

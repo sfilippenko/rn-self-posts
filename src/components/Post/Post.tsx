@@ -5,6 +5,7 @@ import { Post as PostInterface } from '../../types/common';
 import AppText from '../AppText';
 import { Colors } from '../../consts/theme';
 import { MainRoutes } from '../../types/navigation';
+import { formatDate } from '../../utils/dates';
 
 interface Props {
   data: PostInterface;
@@ -23,7 +24,7 @@ const Post: React.FC<Props> = (props) => {
     <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={handlePress}>
       <ImageBackground source={{ uri: img }} style={styles.image}>
         <View style={styles.textWrapper}>
-          <AppText style={styles.title}>{new Date(date).toLocaleDateString()}</AppText>
+          <AppText style={styles.title}>{formatDate(date)}</AppText>
         </View>
       </ImageBackground>
     </TouchableOpacity>
