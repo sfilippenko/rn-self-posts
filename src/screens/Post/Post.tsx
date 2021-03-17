@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, ScrollView, Alert } from 'react-native';
+import { StyleSheet, View, Image, ScrollView, Alert, Pressable } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -12,6 +12,7 @@ import { selectIsPostUpdating, selectPost } from '../../store/post/selectors';
 import { formatDate } from '../../utils/dates';
 import { deletePostAsync, toggleBookedAsync } from '../../store/post/async';
 import { AppState } from '../../types/state';
+import ImageViewer from '../../components/ImageViewer';
 
 const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props) => {
   const { route, navigation } = props;
@@ -67,7 +68,16 @@ const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom }} style={styles.container}>
-      <Image source={{ uri: post.img }} style={styles.image} />
+      <ImageViewer
+        src={post.img}
+        sourceRender={({ onOpen }) => {
+          return (
+            <Pressable onPress={onOpen}>
+              <Image source={{ uri: post.img }} style={styles.image} />
+            </Pressable>
+          );
+        }}
+      />
       <View style={styles.textWrapper}>
         <AppText>{post.text}</AppText>
       </View>
@@ -89,7 +99,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 300,
-    resizeMode: 'contain',
     marginBottom: 10,
   },
 });

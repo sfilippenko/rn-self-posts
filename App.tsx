@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'react-native';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-gesture-handler';
@@ -25,7 +25,7 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <SafeAreaProvider>
-        <StatusBar style="auto" />
+        <StatusBar />
         <NavigationContainer>
           <Root />
         </NavigationContainer>
