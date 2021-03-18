@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Image, ScrollView, Alert, Pressable } from 'react-native';
+import { StyleSheet, View, ScrollView, Alert, Pressable } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { MainParamsList, MainRoutes } from '../../types/navigation';
@@ -13,12 +12,12 @@ import { formatDate } from '../../utils/dates';
 import { deletePostAsync, toggleBookedAsync } from '../../store/post/async';
 import { AppState } from '../../types/state';
 import ImageViewer from '../../components/ImageViewer';
+import ImageFullWidth from '../../components/ImageFullWidth';
 
 const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props) => {
   const { route, navigation } = props;
   const { id } = route.params;
   const loading = useSelector((state: AppState) => selectIsPostUpdating(state, id));
-  const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
   const post = useSelector((state: AppState) => selectPost(state, id));
 
@@ -67,13 +66,13 @@ const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props
   }
 
   return (
-    <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom }} style={styles.container}>
+    <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
       <ImageViewer
         src={post.img}
         sourceRender={({ onOpen }) => {
           return (
-            <Pressable onPress={onOpen}>
-              <Image source={{ uri: post.img }} style={styles.image} />
+            <Pressable onPress={onOpen} style={styles.imageWrapper}>
+              <ImageFullWidth src={post.img} srcPrefix="postDetails" />
             </Pressable>
           );
         }}
@@ -91,14 +90,14 @@ const Post: React.FC<StackScreenProps<MainParamsList, MainRoutes.Post>> = (props
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  contentContainer: {
     padding: 10,
   },
   textWrapper: {
     marginBottom: 10,
   },
-  image: {
-    width: '100%',
-    height: 300,
+  imageWrapper: {
     marginBottom: 10,
   },
 });

@@ -18,7 +18,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sfilippenko.rn-self-posts-app",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.sfilippenko.rn_elf_posts_app",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     }
   }
 }
